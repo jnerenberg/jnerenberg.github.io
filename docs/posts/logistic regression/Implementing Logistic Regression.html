@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Julia Nerenberg">
-<meta name="dcterms.date" content="2024-04-25">
-<meta name="description" content="In this blog post, you’ll work through a complete example of the standard machine learning workflow. Your primary goal is to determine the smallest number of measurements necessary to confidently determine the species of a penguin.">
+<meta name="dcterms.date" content="2024-05-05">
+<meta name="description" content="In this blog post, you’ll implement a generalized form of gradient descent for logistic regression.">
 
-<title>My Awesome CSCI 0451 Blog - Palmer Penguins</title>
+<title>My Awesome CSCI 0451 Blog - Implementing Logistic Regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -171,10 +171,10 @@ background-size: cover;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Palmer Penguins</h1>
+      <h1 class="title">Implementing Logistic Regression</h1>
                   <div>
         <div class="description">
-          <p>In this blog post, you’ll work through a complete example of the standard machine learning workflow. Your primary goal is to determine the smallest number of measurements necessary to confidently determine the species of a penguin.</p>
+          <p>In this blog post, you’ll implement a generalized form of gradient descent for logistic regression.</p>
         </div>
       </div>
                 </div>
@@ -193,7 +193,7 @@ background-size: cover;
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 25, 2024</p>
+        <p class="date">May 5, 2024</p>
       </div>
     </div>
     
@@ -392,7 +392,7 @@ background-size: cover;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Classifying-Palmer-Penguins_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="Implementing Logistic Regression_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -420,21 +420,21 @@ background-size: cover;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Classifying-Palmer-Penguins_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="Implementing Logistic Regression_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Classifying-Palmer-Penguins_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="Implementing Logistic Regression_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Classifying-Palmer-Penguins_files/figure-html/cell-5-output-3.png" class="img-fluid figure-img"></p>
+<p><img src="Implementing Logistic Regression_files/figure-html/cell-5-output-3.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -620,7 +620,7 @@ Test Set Score:  0.9852941176470589</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Classifying-Palmer-Penguins_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="Implementing Logistic Regression_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -639,7 +639,7 @@ Test Set Score:  0.9852941176470589</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Classifying-Palmer-Penguins_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="Implementing Logistic Regression_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
