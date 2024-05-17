@@ -1,72 +1,65 @@
 import torch
 import torch.nn as nn
-import torch.optim as optim
-import numpy as np
 
+class LinearModel:
+    def __init__(self):
+        self.w = None
+    
+    def score(self, X):
+        return X @ self.w
+    
+    def predict(self, X):
+        return self.score(X) > 0
+    
 class LogisticRegression(nn.Module):
+
+    # Initialize the model with the input dimension
     def __init__(self, input_dim):
         super(LogisticRegression, self).__init__()
         self.linear = nn.Linear(input_dim, 1)
-        self.sigmoid = nn.Sigmoid()
-        
-    def forward(self, x):
-        return self.sigmoid(self.linear(x))
+
+    def sigmoid(self, z):
+        '''
+        Sigmoid activation function
+        '''
+        return 1 / (1 + torch.exp(-z))
+    
+    def forward(self, X):
+        '''
+        Forward pass of the model
+        '''
+        z = self.linear(X)
+        return self.sigmoid(z)
+    
+    def loss(self, y_pred, y):
+        '''
+        Binary cross-entropy loss
+        '''
+        return (1/y_pred.size(0)) * ( (-y_pred.log()*y) + (-(1-y_pred).log()*(1-y)) ).sum()
     
 class GradientDescentOptimizer:
-    def __init__(self, model, learning_rate):
+    def __init__(self, model, learning_rate, momentum=0):
+        '''
+        Initialize the optimizer with the model, learning rate and momentum
+        '''
         self.model = model
         self.learning_rate = learning_rate
+        self.momentum = momentum
+        self.velocity = 0
         
     def step(self):
+        '''
+        Perform a single optimization step
+        '''
+        
+        # Compute the gradients
+        gradients = self.model.gradient()
+
+        # Update the velocity
+        self.velocity = self.momentum * self.velocity + self.learning_rate * gradients
+
+        # Update the model parameters
         for param in self.model.parameters():
-            param.data -= self.learning_rate * param.grad.data
-            param.grad.data.zero_()
+            param.data -= self.velocity
 
-class NewtonOptimizer:
-    def __init__(self, model):
-        self.model = model
-        
-    def step(self):
-        x = self.model.linear.weight.data
-        y = self.model.linear.bias.data
-        z = self.model.sigmoid(x)
-        z = z * (1 - z)
-        z = z.view(-1)
-        z = z.unsqueeze(1)
-        z = z.expand(-1, x.size(1))
-        z = z.unsqueeze(2)
-        z = z.expand(-1, -1, x.size(1))
-        hessian = x.t().unsqueeze(0).expand(x.size(0), -1, -1)
-        hessian = hessian * z
-        hessian = hessian.bmm(x.unsqueeze(2))
-        hessian = hessian.squeeze(2)
-        hessian = hessian.inverse()
-        gradient = self.model.linear.weight.grad.data
-        x.data -= hessian.bmm(gradient.unsqueeze(2)).squeeze(2)
-        gradient = self.model.linear.bias.grad.data
-        y.data -= hessian.bmm(gradient.unsqueeze(2)).squeeze(2)
 
-def train(model, optimizer, criterion, x, y, epochs):
-    for epoch in range(epochs):
-        optimizer.model.zero_grad()
-        output = model(x)
-        loss = criterion(output, y)
-        loss.backward()
-        optimizer.step()
-        print('Epoch: {0}, Loss: {1}'.format(epoch, loss.item()))
-
-def main():
-    np.random.seed(0)
-    x = np.random.randn(100, 2)
-    y = np.random.randint(0, 2, (100, 1))
-    x = torch.from_numpy(x).float()
-    y = torch.from_numpy(y).float()
-    model = LogisticRegression(2)
-    criterion = nn.BCELoss()
-    optimizer = GradientDescentOptimizer(model, 0.1)
-    train(model, optimizer, criterion, x, y, 100)
-    optimizer = NewtonOptimizer(model)
-    train(model, optimizer, criterion, x, y, 100)
-
-if __name__ == '__main__':
-    main()
