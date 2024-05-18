@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Replication Study/Replication-Study.html",
       "/posts/logistic regression/Implementing Logistic Regression.html",
       "/posts/optimal decision making/'Optimal' Decision-Making.html",
       "/posts/palmer penguins/Classifying-Palmer-Penguins.html",
