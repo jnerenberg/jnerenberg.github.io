@@ -17,6 +17,9 @@ class LogisticRegression(nn.Module):
     def __init__(self, input_dim):
         super(LogisticRegression, self).__init__()
         self.linear = nn.Linear(input_dim, 1)
+        # gradient
+        self.linear.weight.data.fill_(0)
+        self.linear.bias.data.fill_(0)
 
     def sigmoid(self, z):
         '''
@@ -37,6 +40,18 @@ class LogisticRegression(nn.Module):
         '''
         return (1/y_pred.size(0)) * ( (-y_pred.log()*y) + (-(1-y_pred).log()*(1-y)) ).sum()
     
+    def grad(self):
+        '''
+        Compute the gradients of the loss w.r.t the model parameters
+        '''
+        return self.linear.weight.grad, self.linear.bias.grad
+    
+    def gradient(self):
+        '''
+        Compute the gradients of the loss w.r.t the model parameters, but with the full name
+        '''
+        return self.linear.weight.grad, self.linear.bias.grad
+    
 class GradientDescentOptimizer:
     def __init__(self, model, learning_rate, momentum=0):
         '''
@@ -53,7 +68,7 @@ class GradientDescentOptimizer:
         '''
         
         # Compute the gradients
-        gradients = self.model.gradient()
+        gradients = self.model.grad()
 
         # Update the velocity
         self.velocity = self.momentum * self.velocity + self.learning_rate * gradients
